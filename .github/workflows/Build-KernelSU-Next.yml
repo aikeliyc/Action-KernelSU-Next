@@ -5,11 +5,11 @@ on:
       CPU:
         description: "分支"
         required: true
-        default: 'sm7675'
+        default: 'sm8650'
       FEIL:
         description: "配置文件"
         required: true
-        default: 'oneplus_ace_3v_v'
+        default: 'oneplus_ace_3_pro_v'
       CPUD:
         description: "处理器代号"
         required: true
@@ -28,8 +28,8 @@ jobs:
 
      - name: Configure Git
        run: |
-        git config --global user.name "wuua"
-        git config --global user.email "3436678798@qq.com"
+        git config --global user.name "aikeliyc"
+        git config --global user.email "1314aikeli@gmail.com"
 
      - name: Clean up disk space
        run: |
@@ -49,7 +49,7 @@ jobs:
         chmod a+x ~/repo
         sudo mv ~/repo /usr/local/bin/repo
 
-     - name: Initialize repo and sync
+     - name: Initialize repo 和 sync
        run: |
         mkdir kernel_workspace && cd kernel_workspace
         repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/${{ github.event.inputs.CPU }} -m ${{ github.event.inputs.FEIL }}.xml --depth=1
