@@ -71,7 +71,7 @@ jobs:
      - name: Add make name
        run: |
          cd kernel_workspace/kernel_platform
-         sed -i '$s|echo "\$res"|echo "\$res-XiaoChen+"|' ./common/scripts/setlocalversion
+         sed -i '$s|echo "\$res"|echo "\$res-o-g1132d864665d"|' ./common/scripts/setlocalversion
          sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl   
          
      - name: Build kernel
