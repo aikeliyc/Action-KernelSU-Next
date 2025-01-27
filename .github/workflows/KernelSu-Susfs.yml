@@ -5,11 +5,11 @@ on:
       CPU:
         description: "分支"
         required: true
-        default: 'sm7675'
+        default: 'sm8650'
       FEIL:
         description: "配置文件"
         required: true
-        default: 'oneplus_ace_3v_v'
+        default: 'oneplus_ace_3_pro_v'
       CPUD:
         description: "处理器代号"
         required: true
@@ -40,8 +40,8 @@ jobs:
           
       - name: Configure Git
         run: |
-         git config --global user.name "mcxiaochenn"
-         git config --global user.email "mcxiaochenn.yyds@gmail.com"
+         git config --global user.name "ychenxuan"
+         git config --global user.email "3494167979@qq.com"
 
       - name: Install dependencies
         run: |
@@ -67,7 +67,7 @@ jobs:
       - name: Set up KernelSU Next
         run: |
          cd kernel_workspace/kernel_platform
-         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
          cd KernelSU
          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
