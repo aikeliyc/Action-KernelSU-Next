@@ -28,8 +28,8 @@ jobs:
 
      - name: Configure Git
        run: |
-        git config --global user.name "wuua"
-        git config --global user.email "3436678798@qq.com"
+        git config --global user.name "ychenxuan"
+        git config --global user.email "3494167979@qq.com"
 
      - name: Clean up disk space
        run: |
@@ -59,7 +59,7 @@ jobs:
         sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
         sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
 
-     - name: Set up KernelSU
+     - name: Set up KernelSU_Next
        run: |
         cd kernel_workspace/kernel_platform
         curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s v1.0.3
