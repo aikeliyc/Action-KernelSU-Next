@@ -22,6 +22,10 @@ on:
         description: "内核版本"
         required: true
         default: '6.1'
+      KERNEL_NAME:
+        description: "自定义内核名称"
+        required: true
+        default: '-android14-11-o-g1132d864665d'
       KSUNEXT_ENABLED:
         description: "添加 KSU Next"
         required: true
