@@ -1,4 +1,4 @@
-name: Build KernelSU Next SUSFS OnePlus
+name: Build K OnePlus
 on:
   workflow_dispatch:
     inputs:
