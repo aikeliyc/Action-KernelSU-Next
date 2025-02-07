@@ -74,7 +74,11 @@ jobs:
            cd ./common/
            patch -p1 < 50_add_susfs_in_gki-android14-6.1.patch || true
 
-           
+    - name: Add make name
+      run: |
+         cd kernel_workspace/kernel_platform
+         sed -i '$s|echo "\$res"|echo "\${{ github.event.inputs.KERNEL_NAME }}"|' ./common/scripts/setlocalversion
+         sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl      
     - name: 编译内核
       run: |
         cd kernel
