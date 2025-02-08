@@ -27,15 +27,20 @@ on:
         required: true
         default: '-android14-11-o-g1132d864665d'
       kernelsu_variant:
-        description: "选择 KSU"
+        description: "添加 KSU"
         required: true
         type: choice
         options:
-          - Blank
+          - False
           - Official
           - Next
           - MKSU
         default: Blank
+      SUSFS_ENABLED:
+        description: "添加 SUSFS"
+        required: true
+        type: boolean
+        default: true
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -108,7 +113,7 @@ jobs:
           sed -i "s/DKSU_VERSION=11998/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
          
       - name: Apply SUSFS Patches KernelSU
-        if: ${{ github.event.inputs.kernelsu_variant == 'Official' }}
+        if: ${{ (github.event.inputs.kernelsu_variant == 'Official') && github.event.inputs.SUSFS_ENABLED == 'true' }}
         run: |
           cd kernel_workspace
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
@@ -120,7 +125,7 @@ jobs:
           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
-          cd ./KernelSU
+          cd KernelSU
           patch -p1 --forward < 10_enable_susfs_for_ksu.patch
 
           # Change to common directory and apply SUSFS patch
@@ -128,7 +133,7 @@ jobs:
           patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.android_version }}-${{ github.event.inputs.kernel_version }}.patch || true
 
       - name: Apply SUSFS Patches KernelSU-Next
-        if: ${{ github.event.inputs.kernelsu_variant == 'Next' }}
+        if: ${{ (github.event.inputs.kernelsu_variant == 'Next') && github.event.inputs.SUSFS_ENABLED == 'true' }}
         run: |
           cd kernel_workspace
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
@@ -140,7 +145,7 @@ jobs:
           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
-          cd ./KernelSU-Next
+          cd KernelSU-Next
           cp ../../kernel_patches/KernelSU-Next-Implement-SUSFS-v1.5.5-Universal.patch ./
           patch -p1 --forward < KernelSU-Next-Implement-SUSFS-v1.5.5-Universal.patch || true
 
@@ -149,7 +154,7 @@ jobs:
           patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.android_version }}-${{ github.event.inputs.kernel_version }}.patch || true
 
       - name: Apply SUSFS Patches MKSU
-        if: ${{ github.event.inputs.kernelsu_variant == 'MKSU' }}
+        if: ${{ (github.event.inputs.kernelsu_variant == 'MKSU') && github.event.inputs.SUSFS_ENABLED == 'true' }}
         run: |
           cd kernel_workspace
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
@@ -162,7 +167,7 @@ jobs:
           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
-          cd ./KernelSU
+          cd KernelSU
           echo "Applying SUSFS patches..."
           patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
           
@@ -175,10 +180,10 @@ jobs:
           patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.android_version }}-${{ github.event.inputs.kernel_version }}.patch || true
 
       - name: Apply Hide Stuff Patches
-        if: ${{ github.event.inputs.kernelsu_variant == 'MKSU' || github.event.inputs.kernelsu_variant == 'Next' || github.event.inputs.kernelsu_variant == 'Official' }}
+        if: ${{ (github.event.inputs.kernelsu_variant == 'MKSU' || github.event.inputs.kernelsu_variant == 'Next' || github.event.inputs.kernelsu_variant == 'Official') && github.event.inputs.SUSFS_ENABLED == 'true' }}
         run: |
           cd kernel_workspace
-          cd /common
+          cd common
           # Apply additional patch
           cp ../../kernel_patches/69_hide_stuff.patch ./
           patch -p1 -F 3 < 69_hide_stuff.patch
