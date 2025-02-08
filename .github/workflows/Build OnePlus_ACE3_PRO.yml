@@ -70,7 +70,7 @@ jobs:
         if: github.event.inputs.KSUNEXT_ENABLED == 'true'
         run: |
          cd kernel_workspace/kernel_platform
-         echo "KSU=KernalSU-Next" >> $GITHUB_ENV
+         echo "KSU=KernelSU-Next" >> $GITHUB_ENV
          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next
          cd KernelSU-Next
          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
@@ -81,7 +81,7 @@ jobs:
         if: github.event.inputs.KSU_ENABLED == 'true'
         run: |
          cd kernel_workspace/kernel_platform
-         echo "KSU=KernalSU" >> $GITHUB_ENV
+         echo "KSU=KernelSU" >> $GITHUB_ENV
          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
          cd KernelSU
          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
