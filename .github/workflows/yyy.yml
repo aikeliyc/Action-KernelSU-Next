@@ -121,7 +121,7 @@ jobs:
           cd kernel_platform
           # Copy SUSFS patches
           cp ../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU/
-          cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.ANDROID_VERSION }}.patch ./common/
+          cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch ./common/
           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
@@ -130,7 +130,7 @@ jobs:
 
           # Change to common directory and apply SUSFS patch
           cd ../common
-          patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.ANDROID_VERSION }}.patch || true
+          patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true
 
       - name: Apply SUSFS Patches KernelSU-Next
         if: ${{ (github.event.inputs.kernelsu_variant == 'Next') && github.event.inputs.SUSFS_ENABLED == 'true' }}
@@ -141,7 +141,7 @@ jobs:
           cd kernel_platform
 
           # Copy SUSFS patches
-          cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.ANDROID_VERSION }}.patch ./common/
+          cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch ./common/
           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
@@ -151,7 +151,7 @@ jobs:
 
           # Change to common directory and apply SUSFS patch
           cd ../common
-          patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.ANDROID_VERSION }}.patch || true
+          patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true
 
       - name: Apply SUSFS Patches MKSU
         if: ${{ (github.event.inputs.kernelsu_variant == 'MKSU') && github.event.inputs.SUSFS_ENABLED == 'true' }}
@@ -163,7 +163,7 @@ jobs:
 
           # Copy SUSFS patches
           cp ../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU/
-          cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.ANDROID_VERSION }}.patch ./common/
+          cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch ./common/
           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
@@ -177,7 +177,7 @@ jobs:
 
           # Change to common directory and apply SUSFS patch
           cd ../common
-          patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.ANDROID_VERSION }}.patch || true
+          patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true
 
       - name: Apply Hide Stuff Patches
         if: ${{ (github.event.inputs.kernelsu_variant == 'MKSU' || github.event.inputs.kernelsu_variant == 'Next' || github.event.inputs.kernelsu_variant == 'Official') && github.event.inputs.SUSFS_ENABLED == 'true' }}
