@@ -1,0 +1,106 @@
+name: Build OnePlus_Kernel
+on:
+  workflow_dispatch:
+    inputs:
+      CPU:
+        description: "分支"
+        required: true
+        default: 'sm8650'
+      FEIL:
+        description: "配置文件"
+        required: true
+        default: 'oneplus_ace3_pro_v'
+      CPUD:
+        description: "处理器代号"
+        required: true
+        default: 'pineapple'
+      ANDROID_VERSION:
+        description: "内核安卓版本"
+        required: true
+        default: 'android14'
+      KERNEL_VERSION:
+        description: "内核版本"
+        required: true
+        default: '6.1'
+      KERNEL_NAME:
+        description: "修改内核名称"
+        required: true
+        default: '-android14-11-o-g1132d864665d'
+      kernelsu_variant:
+        description: "选择 KSU"
+        required: true
+        type: choice
+        options:
+          - Kernel
+          - Official
+          - Next
+          - MKSU
+          - RKSU
+        default: Kernel
+      kernelsu_version:
+        description: "选择 KSU 版本"
+        required: true
+        type: choice
+        options:
+          - without ksu
+          - tag
+          - main
+        default: main
+      SUSFS_ENABLED:
+        description: "添加 SUSFS"
+        required: true
+        type: boolean
+        default: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 8192
+          temp-reserve-mb: 2048
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+
+      - name: Configure Git
+        run: |
+         git config --global user.name "ychenxuan"
+         git config --global user.email "3494167979@qq.com"
+
+      - name: Install dependencies
+        run: |
+         sudo apt update && sudo apt upgrade -y
+         sudo apt install -y python3 git curl
+
+      - name: Install repo tool
+        run: |
+         curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
+         chmod a+x ~/repo
+         sudo mv ~/repo /usr/local/bin/repo
+
+      - name: Initialize repo and sync
+        run: |
+         mkdir kernel_workspace && cd kernel_workspace
+         repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/${{ github.event.inputs.CPU }} -m ${{ github.event.inputs.FEIL }}.xml --depth=1
+         repo sync
+         rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
+         rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
+         sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
+         sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
+
+      - name: KernelSU & MKSU version
+        if: ${{ github.event.inputs.kernelsu_variant == 'Official' || github.event.inputs.kernelsu_variant == 'MKSU' }}
+        run: |
+          if [[ "${{ github.event.inputs.kernelsu_version }}" == "tag" ]]; then
+            echo "BRANCH=-" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.kernelsu_version }}" == "main" ]]; then
+            echo "BRANCH=-s main" >> $GITHUB_ENV
+          elif [[ "${{ (github.event.inputs.kernelsu_variant == 'Nextl') && github.event.inputs.kernelsu_version == 'tag' }}" ]]; then
+            echo "BRANCH=-" >> $GITHUB_ENV
+          elif [[ "${{ (github.event.inputs.kernelsu_variant == 'Nextl') && github.event.inputs.kernelsu_version == 'main' }}" ]]; then
+            echo "BRANCH=-s next" >> $GITHUB_ENV
+          fi
