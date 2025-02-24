@@ -82,7 +82,7 @@ jobs:
          chmod a+x ~/repo
          sudo mv ~/repo /usr/local/bin/repo
 
-            - name: KernelSU & MKSU version
+      - name: KernelSU & MKSU version
         if: ${{ github.event.inputs.kernelsu_variant == 'Official' || github.event.inputs.kernelsu_variant == 'MKSU' }}
         run: |
           if [[ "${{ github.event.inputs.kernelsu_version }}" == "tag" ]]; then
@@ -94,3 +94,9 @@ jobs:
           elif [[ "${{ (github.event.inputs.kernelsu_variant == 'Nextl') && github.event.inputs.kernelsu_version == 'main' }}" ]]; then
             echo "BRANCH=-s next" >> $GITHUB_ENV
           fi
+      - name: dev123
+        run: |
+          mkdir kernel_workspace && cd kernel_workspace
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash $BRANCH
+        
+       
