@@ -97,6 +97,5 @@ jobs:
       - name: dev123
         run: |
           mkdir kernel_workspace && cd kernel_workspace
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash $BRANCH
-        
+          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash $BRANCH        
        
